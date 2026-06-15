@@ -1,17 +1,10 @@
 import { Tabs } from 'expo-router';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, FontSize } from '../../constants';
 
-function TabIcon({
-  icon,
-  label,
-  focused,
-}: {
-  icon: string;
-  label: string;
-  focused: boolean;
-}) {
+function TabIcon({ icon, label, focused }: { icon: string; label: string; focused: boolean }) {
   return (
     <View style={styles.tabItem}>
       <Text style={[styles.tabIcon, focused && styles.tabIconFocused]}>{icon}</Text>
@@ -30,12 +23,19 @@ function AddTabButton({ onPress }: { onPress: () => void }) {
 
 export default function TabLayout() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: [
+          styles.tabBar,
+          {
+            height: 58 + insets.bottom,
+            paddingBottom: 6 + insets.bottom,
+          },
+        ],
         tabBarShowLabel: false,
       }}
     >
@@ -67,7 +67,7 @@ export default function TabLayout() {
         name="stats"
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon icon="◷" label="Stats" focused={focused} />
+            <TabIcon icon="◎" label="Stats" focused={focused} />
           ),
         }}
       />
@@ -75,7 +75,7 @@ export default function TabLayout() {
         name="accounts"
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon icon="◻" label="Accounts" focused={focused} />
+            <TabIcon icon="⊟" label="Accounts" focused={focused} />
           ),
         }}
       />
@@ -88,9 +88,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surface,
     borderTopColor: Colors.border,
     borderTopWidth: 1,
-    height: 64,
-    paddingBottom: 8,
-    paddingTop: 8,
+    paddingTop: 6,
   },
   tabItem: {
     alignItems: 'center',

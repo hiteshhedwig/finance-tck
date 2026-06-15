@@ -2,6 +2,7 @@ import {
   View,
   Text,
   FlatList,
+  ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -107,14 +108,14 @@ export default function TransactionsScreen() {
       </View>
 
       {/* Type filter chips */}
-      <FlatList
-        data={TYPE_FILTERS}
+      <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(i) => i.value}
         contentContainerStyle={styles.filterRow}
-        renderItem={({ item }) => (
+      >
+        {TYPE_FILTERS.map((item) => (
           <TouchableOpacity
+            key={item.value}
             onPress={() => setTypeFilter(item.value as TransactionType | 'all')}
             style={[
               styles.filterChip,
@@ -130,8 +131,8 @@ export default function TransactionsScreen() {
               {item.label}
             </Text>
           </TouchableOpacity>
-        )}
-      />
+        ))}
+      </ScrollView>
 
       {/* List */}
       {isLoading ? (
