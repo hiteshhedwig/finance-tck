@@ -13,6 +13,32 @@ function TabIcon({ icon, label, focused }: { icon: string; label: string; focuse
   );
 }
 
+// Replaces the default <a href> link that React Navigation renders on web.
+// On iOS PWA, <a> tags cause Safari to open instead of navigating within
+// the app — a pure TouchableOpacity has no href so iOS stays in the PWA.
+function PressableTabButton({
+  children,
+  style,
+  onPress,
+  onLongPress,
+}: {
+  children?: React.ReactNode;
+  style?: any;
+  onPress?: () => void;
+  onLongPress?: () => void;
+}) {
+  return (
+    <TouchableOpacity
+      style={[{ flex: 1, alignItems: 'center', justifyContent: 'center' }, style]}
+      onPress={onPress}
+      onLongPress={onLongPress}
+      activeOpacity={0.7}
+    >
+      {children}
+    </TouchableOpacity>
+  );
+}
+
 function AddTabButton({ onPress }: { onPress: () => void }) {
   return (
     <TouchableOpacity onPress={onPress} style={styles.addButton}>
@@ -31,12 +57,10 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: [
           styles.tabBar,
-          {
-            height: 58 + insets.bottom,
-            paddingBottom: 6 + insets.bottom,
-          },
+          { height: 58 + insets.bottom, paddingBottom: 6 + insets.bottom },
         ],
         tabBarShowLabel: false,
+        tabBarButton: PressableTabButton,
       }}
     >
       <Tabs.Screen
